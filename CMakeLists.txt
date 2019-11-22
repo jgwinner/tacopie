@@ -23,6 +23,7 @@
 ###
 # project
 ###
+cmake_policy(SET CMP0048 NEW)
 project(tacopie
   LANGUAGES CXX
   VERSION 3.2.0
