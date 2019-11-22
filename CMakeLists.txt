@@ -44,33 +44,33 @@ project(tacopie LANGUAGES CXX VERSION 3.2.0)
 ###
 # compilation options
 ###
-IF (MSVC)
+if (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2 /bigobj")
 
   # was causing conflics with gtest build
   string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 
-  IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "")
+  if ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "")
     set(MSVC_RUNTIME_LIBRARY_CONFIG "/MT")
-  ENDIF()
+  endif ()
 
   foreach (flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
-    IF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MT")
+    if ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MT")
       string(REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-    ELSEIF ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MD")
+    elseif ("${MSVC_RUNTIME_LIBRARY_CONFIG}" STREQUAL "/MD")
       string(REPLACE "/MT" "/MD" ${flag_var} "${${flag_var}}")
-    ELSE ()
+    else ()
       string(REPLACE "/MD" "${MSVC_RUNTIME_LIBRARY_CONFIG}" ${flag_var} "${${flag_var}}")
       string(REPLACE "/MT" "${MSVC_RUNTIME_LIBRARY_CONFIG}" ${flag_var} "${${flag_var}}")
-    ENDIF()
+    endif()
   endforeach()
 
   add_definitions(-D_UNICODE)
   add_definitions(-DUNICODE)
   add_definitions(-DWIN32_LEAN_AND_MEAN)
-ELSE ()
+else ()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
-ENDIF (MSVC)
+endif (MSVC)
 
 
 ###
@@ -91,11 +91,11 @@ include_directories(${TACOPIE_INCLUDES})
 ###
 set(SRC_DIRS "sources" "sources/network" "sources/network/common" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
 
-IF (WIN32)
+if (WIN32)
   set(SRC_DIRS ${SRC_DIRS} "sources/network/windows")
-ELSE ()
+else ()
   set(SRC_DIRS ${SRC_DIRS} "sources/network/unix")
-ENDIF (WIN32)
+endif (WIN32)
 
 foreach(dir ${SRC_DIRS})
   # get directory sources and headers
@@ -129,37 +129,37 @@ configure_file("tacopie.pc.in" "${CMAKE_PKGCONFIG_OUTPUT_DIRECTORY}/tacopie.pc" 
 add_library(${PROJECT_NAME} ${SOURCES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-IF (WIN32)
+if (WIN32)
    set_target_properties(${PROJECT_NAME}
                          PROPERTIES COMPILE_PDB_NAME ${PROJECT_NAME}
                          COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-ENDIF (WIN32)
+endif (WIN32)
 
-IF (WIN32)
+if (WIN32)
   target_link_libraries(${PROJECT_NAME} ws2_32)
-ELSE ()
+else ()
   target_link_libraries(${PROJECT_NAME} pthread)
-ENDIF (WIN32)
+endif (WIN32)
 
 # __TACOPIE_LOGGING_ENABLED
-IF (LOGGING_ENABLED)
+if (LOGGING_ENABLED)
   set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY COMPILE_DEFINITIONS " __TACOPIE_LOGGING_ENABLED=${LOGGING_ENABLED}")
-ENDIF (LOGGING_ENABLED)
+endif (LOGGING_ENABLED)
 
 # __TACOPIE_CONNECTION_QUEUE_SIZE
-IF (CONNECTION_QUEUE_SIZE)
+if (CONNECTION_QUEUE_SIZE)
   set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY COMPILE_DEFINITIONS " __TACOPIE_CONNECTION_QUEUE_SIZE=${CONNECTION_QUEUE_SIZE}")
-ENDIF (CONNECTION_QUEUE_SIZE)
+endif (CONNECTION_QUEUE_SIZE)
 
 #__TACOPIE_IO_SERVICE_NB_WORKERS
-IF (IO_SERVICE_NB_WORKERS)
+if (IO_SERVICE_NB_WORKERS)
   set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY COMPILE_DEFINITIONS " __TACOPIE_IO_SERVICE_NB_WORKERS=${IO_SERVICE_NB_WORKERS}")
-ENDIF(IO_SERVICE_NB_WORKERS)
+endif (IO_SERVICE_NB_WORKERS)
 
 #__TACOPIE_TIMEOUT
-IF (SELECT_TIMEOUT)
+if (SELECT_TIMEOUT)
   set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY COMPILE_DEFINITIONS " __TACOPIE_TIMEOUT=${SELECT_TIMEOUT}")
-ENDIF(SELECT_TIMEOUT)
+endif (SELECT_TIMEOUT)
 
 
 ###
@@ -177,17 +177,17 @@ install(DIRECTORY ${TACOPIE_INCLUDES}/ DESTINATION include USE_SOURCE_PERMISSION
 ###
 # examples
 ###
-IF (BUILD_EXAMPLES)
+if (BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF(BUILD_EXAMPLES)
+endif (BUILD_EXAMPLES)
 
 
 ###
 # tests
 ###
-IF (BUILD_TESTS)
+if (BUILD_TESTS)
   add_subdirectory(tests)
   ExternalProject_Add("googletest"
                       GIT_REPOSITORY "https://github.com/google/googletest.git"
                       CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
-ENDIF(BUILD_TESTS)
+endif (BUILD_TESTS)
