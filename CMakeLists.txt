@@ -136,9 +136,9 @@ if (WIN32)
 endif ()
 
 if (WIN32)
-  target_link_libraries(${PROJECT_NAME} ws2_32)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
 else ()
-  target_link_libraries(${PROJECT_NAME} pthread)
+  target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
 endif ()
 
 # __TACOPIE_LOGGING_ENABLED
