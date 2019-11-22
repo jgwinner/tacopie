@@ -130,9 +130,9 @@ add_library(${PROJECT_NAME} ${SOURCES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if (WIN32)
-   set_target_properties(${PROJECT_NAME}
-                         PROPERTIES COMPILE_PDB_NAME ${PROJECT_NAME}
-                         COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    COMPILE_PDB_NAME ${PROJECT_NAME}
+    COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif (WIN32)
 
 if (WIN32)
@@ -188,6 +188,6 @@ endif (BUILD_EXAMPLES)
 if (BUILD_TESTS)
   add_subdirectory(tests)
   ExternalProject_Add("googletest"
-                      GIT_REPOSITORY "https://github.com/google/googletest.git"
-                      CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
+    GIT_REPOSITORY "https://github.com/google/googletest.git"
+    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
 endif (BUILD_TESTS)
