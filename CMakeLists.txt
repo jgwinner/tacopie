@@ -21,6 +21,11 @@
 # SOFTWARE.
 
 ###
+# project
+###
+project(tacopie LANGUAGES CXX VERSION 3.2.0)
+
+###
 # config
 ###
 cmake_minimum_required(VERSION 3.13)
@@ -33,13 +38,6 @@ include(ExternalProject)
 # verbose make
 ###
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
-
-
-###
-# project
-###
-project(tacopie LANGUAGES CXX VERSION 3.2.0)
-
 
 ###
 # compilation options
