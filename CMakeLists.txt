@@ -70,7 +70,7 @@ if (MSVC)
   add_definitions(-DWIN32_LEAN_AND_MEAN)
 else ()
   add_compile_options(-W -Wall -Wextra -O3)
-endif (MSVC)
+endif ()
 
 
 ###
@@ -95,7 +95,7 @@ if (WIN32)
   set(SRC_DIRS ${SRC_DIRS} "sources/network/windows")
 else ()
   set(SRC_DIRS ${SRC_DIRS} "sources/network/unix")
-endif (WIN32)
+endif ()
 
 foreach(dir ${SRC_DIRS})
   # get directory sources and headers
@@ -133,13 +133,13 @@ if (WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES
     COMPILE_PDB_NAME ${PROJECT_NAME}
     COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-endif (WIN32)
+endif ()
 
 if (WIN32)
   target_link_libraries(${PROJECT_NAME} ws2_32)
 else ()
   target_link_libraries(${PROJECT_NAME} pthread)
-endif (WIN32)
+endif ()
 
 # __TACOPIE_LOGGING_ENABLED
 option(LOGGING_ENABLED "Enable logging" OFF)
