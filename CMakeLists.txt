@@ -77,8 +77,6 @@ endif ()
 ###
 # variables
 ###
-set(DEPS_INCLUDES ${PROJECT_SOURCE_DIR}/deps/include)
-set(DEPS_LIBRARIES ${PROJECT_SOURCE_DIR}/deps/lib)
 set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
 
 
