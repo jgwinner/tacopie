@@ -23,7 +23,11 @@
 ###
 # project
 ###
-project(tacopie LANGUAGES CXX VERSION 3.2.0)
+project(tacopie
+  LANGUAGES CXX
+  VERSION 3.2.0
+  DESCRIPTION "C++ TCP Library"
+  HOMEPAGE_URL "")
 
 ###
 # config
