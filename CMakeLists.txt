@@ -35,8 +35,6 @@ project(tacopie
 cmake_minimum_required(VERSION 3.13)
 set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_CXX_STANDARD 11)
-include(ExternalProject)
-
 
 ###
 # verbose make
@@ -189,6 +187,7 @@ endif (BUILD_EXAMPLES)
 ###
 if (BUILD_TESTS)
   add_subdirectory(tests)
+  include(ExternalProject)
   ExternalProject_Add("googletest"
     GIT_REPOSITORY "https://github.com/google/googletest.git"
     CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
