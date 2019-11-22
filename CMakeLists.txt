@@ -69,7 +69,7 @@ if (MSVC)
   add_definitions(-DUNICODE)
   add_definitions(-DWIN32_LEAN_AND_MEAN)
 else ()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -O3")
+  add_compile_options(-W -Wall -Wextra -O3)
 endif (MSVC)
 
 
