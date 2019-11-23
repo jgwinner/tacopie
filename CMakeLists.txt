@@ -73,39 +73,7 @@ else ()
   add_compile_options(-W -Wall -Wextra -O3)
 endif ()
 
-
-###
-# variables
-###
-set(TACOPIE_INCLUDES ${PROJECT_SOURCE_DIR}/includes)
-
-
-###
-# includes
-###
-include_directories(${TACOPIE_INCLUDES})
-
-###
-# sources
-###
-set(SRC_DIRS "sources" "sources/network" "sources/network/common" "sources/utils" "includes/tacopie" "includes/tacopie/network" "includes/tacopie/utils")
-
-if (WIN32)
-  set(SRC_DIRS ${SRC_DIRS} "sources/network/windows")
-else ()
-  set(SRC_DIRS ${SRC_DIRS} "sources/network/unix")
-endif ()
-
-foreach(dir ${SRC_DIRS})
-  # get directory sources and headers
-  file(GLOB s_${dir} "${dir}/*.cpp")
-  file(GLOB h_${dir} "${dir}/*.hpp")
-  file(GLOB i_${dir} "${dir}/*.ipp")
-
-  # set sources
-  set(SOURCES ${SOURCES} ${s_${dir}} ${h_${dir}} ${i_${dir}})
-endforeach()
-
+include(sources.cmake)
 
 ###
 # outputs
@@ -114,7 +82,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_PKGCONFIG_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig)
-
 
 ###
 # pkg-config
@@ -125,8 +92,9 @@ configure_file("tacopie.pc.in" "${CMAKE_PKGCONFIG_OUTPUT_DIRECTORY}/tacopie.pc" 
 ###
 # executable
 ###
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${tacopie_sources})
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_include_directories(${PROJECT_NAME} PUBLIC ${tacopie_includes})
 
 if (WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -164,7 +132,6 @@ if (SELECT_TIMEOUT MATCHES "^[0-9]+")
   target_compile_definitions(${PROJECT_NAME} PRIVATE __TACOPIE_TIMEOUT=${SELECT_TIMEOUT})
 endif ()
 
-
 ###
 # install
 ###
@@ -174,7 +141,8 @@ install(CODE "FILE(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})")
 # install tacopie
 install(DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/ DESTINATION lib USE_SOURCE_PERMISSIONS)
 install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ DESTINATION bin USE_SOURCE_PERMISSIONS)
-install(DIRECTORY ${TACOPIE_INCLUDES}/ DESTINATION include USE_SOURCE_PERMISSIONS)
+# NOTE: this fails if more directories are added to ${tacopie_includes}
+install(DIRECTORY ${tacopie_includes}/ DESTINATION include USE_SOURCE_PERMISSIONS)
 
 
 ###
