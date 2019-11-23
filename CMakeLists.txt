@@ -34,13 +34,10 @@ project(tacopie
 # config
 ###
 cmake_minimum_required(VERSION 3.13)
+option(VERBOSE_MAKEFILE "Generate verbose output from Makefile builds" OFF)
+set(CMAKE_VERBOSE_MAKEFILE ${VERBOSE_MAKEFILE})
 set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_CXX_STANDARD 11)
-
-###
-# verbose make
-###
-# set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 ###
 # compilation options
@@ -148,18 +145,20 @@ install(DIRECTORY ${tacopie_includes}/ DESTINATION include USE_SOURCE_PERMISSION
 ###
 # examples
 ###
+option(BUILD_EXAMPLES "Build examples" OFF)
 if (BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif (BUILD_EXAMPLES)
+endif ()
 
 
 ###
 # tests
 ###
+option(BUILD_TESTS "Build tests" OFF)
 if (BUILD_TESTS)
   add_subdirectory(tests)
   include(ExternalProject)
   ExternalProject_Add("googletest"
     GIT_REPOSITORY "https://github.com/google/googletest.git"
     CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
-endif (BUILD_TESTS)
+endif ()
