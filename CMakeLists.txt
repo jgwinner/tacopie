@@ -23,7 +23,9 @@
 ###
 # project
 ###
+# see cmake --help-policy CMP<NNNN>
 cmake_policy(SET CMP0048 NEW)
+cmake_policy(SET CMP0077 NEW)
 project(tacopie
   LANGUAGES CXX
   VERSION 3.2.0
@@ -154,9 +156,9 @@ endif ()
 ###
 option(BUILD_TESTS "Build tests" OFF)
 if (BUILD_TESTS)
+  if (NOT TARGET gtest)
+    set(INSTALL_GTEST OFF)
+    add_subdirectory(googletest)
+  endif ()
   add_subdirectory(tests)
-  include(ExternalProject)
-  ExternalProject_Add("googletest"
-    GIT_REPOSITORY "https://github.com/google/googletest.git"
-    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps")
 endif ()
