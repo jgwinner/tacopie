@@ -100,11 +100,8 @@ if (WIN32)
     COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif ()
 
-if (WIN32)
-  target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
-else ()
-  target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
-endif ()
+find_package(Threads REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 
 # __TACOPIE_LOGGING_ENABLED
 option(LOGGING_ENABLED "Enable logging" OFF)
