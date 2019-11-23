@@ -85,12 +85,10 @@ set(CMAKE_PKGCONFIG_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig
 ###
 configure_file("tacopie.pc.in" "${CMAKE_PKGCONFIG_OUTPUT_DIRECTORY}/tacopie.pc" @ONLY)
 
-
 ###
 # executable
 ###
-add_library(${PROJECT_NAME} STATIC ${tacopie_sources})
-set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+add_library(${PROJECT_NAME} SHARED ${tacopie_sources})
 target_include_directories(${PROJECT_NAME} PUBLIC ${tacopie_includes})
 
 if (WIN32)
