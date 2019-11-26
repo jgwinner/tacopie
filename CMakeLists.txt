@@ -41,6 +41,8 @@ set(CMAKE_VERBOSE_MAKEFILE ${VERBOSE_MAKEFILE})
 set(CMAKE_MACOSX_RPATH 1)
 set(CMAKE_CXX_STANDARD 11)
 
+set(EXPORT_TARGET_NAME ${PROJECT_NAME} CACHE STRING "Name of the exported CMake target used in install(EXPORT)")
+
 ###
 # compilation options
 ###
@@ -94,13 +96,19 @@ configure_file("tacopie.pc.in" "${CMAKE_PKGCONFIG_OUTPUT_DIRECTORY}/tacopie.pc" 
 # executable
 ###
 add_library(${PROJECT_NAME} SHARED ${tacopie_sources})
-target_include_directories(${PROJECT_NAME} PUBLIC ${tacopie_includes})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${tacopie_includes}>
+  $<INSTALL_INTERFACE:includes>)
 
 if (WIN32)
   set_target_properties(${PROJECT_NAME} PROPERTIES
     COMPILE_PDB_NAME ${PROJECT_NAME}
     COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif ()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  SOVERSION ${PROJECT_VERSION}
+  RESOURCE ${CMAKE_PKGCONFIG_OUTPUT_DIRECTORY}/tacopie.pc)
 
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
@@ -132,15 +140,12 @@ endif ()
 ###
 # install
 ###
-# ensure lib and bin directories exist
-install(CODE "file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})")
-install(CODE "file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})")
-# install tacopie
-install(DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/ DESTINATION lib USE_SOURCE_PERMISSIONS)
-install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ DESTINATION bin USE_SOURCE_PERMISSIONS)
 # NOTE: this fails if more directories are added to ${tacopie_includes}
+include(GNUInstallDirs)
 install(DIRECTORY ${tacopie_includes}/ DESTINATION include USE_SOURCE_PERMISSIONS)
-
+install(TARGETS ${PROJECT_NAME} EXPORT ${EXPORT_TARGET_NAME}
+  LIBRARY
+  RESOURCE DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 ###
 # examples
