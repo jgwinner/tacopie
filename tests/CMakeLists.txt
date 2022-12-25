@@ -21,54 +21,14 @@
 # SOFTWARE.
 
 ###
-# project
-###
-set(PROJECT tacopie_tests)
-project(${PROJECT} CXX)
-
-
-###
-# compilation options
-###
-IF (NOT WIN32)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-ENDIF (NOT WIN32)
-
-
-###
-# includes
-###
-include_directories(${DEPS_INCLUDES} ${TACOPIE_INCLUDES})
-
-
-###
-# libraries
-###
-link_directories(${DEPS_LIBRARIES})
-
-
-###
 # sources
 ###
-set(SOURCES "")
-set(DIRS "sources" "sources/spec" "sources/spec/**")
-foreach(dir ${DIRS})
-  # get directory sources
-  file(GLOB s_${dir} "${dir}/*.cpp")
-  # set sources
-  set(SOURCES ${SOURCES} ${s_${dir}})
-endforeach()
-
+set(tacopie_test_sources
+  sources/main.cpp)
 
 ###
 # executable
 ###
-add_executable(${PROJECT} ${SOURCES})
-
-target_link_libraries(${PROJECT} tacopie gtest)
-
-IF (WIN32)
-  target_link_libraries(${PROJECT} ws2_32)
-ELSE ()
-  target_link_libraries(${PROJECT} pthread)
-ENDIF (WIN32)
+add_executable(${PROJECT_NAME}_tests ${tacopie_test_sources})
+target_link_libraries(${PROJECT_NAME}_tests PRIVATE ${PROJECT_NAME} gtest)
+add_test(NAME ${PROJECT_NAME}::tests COMMAND ${PROJECT_NAME}_tests)
