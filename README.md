@@ -1,3 +1,7 @@
+# JGwinner note:
+
+This is simply a clone of a library to push a PR through slightly faster
+
 # Important
 
 Please be advised that this library **is no longer maintained**.
